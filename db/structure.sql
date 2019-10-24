@@ -49,7 +49,8 @@ CREATE TABLE public.products (
     manufacturer text,
     name text,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    tsv tsvector
 );
 
 
@@ -113,12 +114,27 @@ ALTER TABLE ONLY public.schema_migrations
 
 
 --
+-- Name: index_products_on_tsv; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_products_on_tsv ON public.products USING gin (tsv);
+
+
+--
+-- Name: products tsvectorupdate; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER tsvectorupdate BEFORE INSERT OR UPDATE ON public.products FOR EACH ROW EXECUTE PROCEDURE tsvector_update_trigger('tsv', 'pg_catalog.english', 'description', 'manufacturer_name', 'name');
+
+
+--
 -- PostgreSQL database dump complete
 --
 
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
-('20191021230048');
+('20191021230048'),
+('20191024121431');
 
 
