@@ -6,7 +6,7 @@ git_source(:github) do |repo_name|
 end
 
 gem 'rails', '~> 5.1.5'
-gem 'puma', '~> 3.7'
+gem 'puma', '~> 4.3'
 
 group :test do
   gem 'rspec-rails'
